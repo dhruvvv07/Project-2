@@ -1,1 +1,173 @@
+import java.util.*;
+import java.lang.*;
 
+class Transaction {
+    String type;
+    double amount;
+    double balanceAfter;
+    public Transaction(String type, double amount, double balanceAfter) {
+        this.type = type;
+        this.amount = amount;
+        this.balanceAfter = balanceAfter;
+    }
+    public String toString() {
+        return type + ": Rs. " + amount + ", Balance after: Rs. " + balanceAfter;
+    }
+}
+class Account {
+    private String accountNumber;
+    private String accountHolderName;
+    private double balance;
+    private ArrayList<Transaction> transactions;
+    public Account(String accountNumber, String accountHolderName) {
+        this.accountNumber = accountNumber;
+        this.accountHolderName = accountHolderName;
+        this.balance = 0.0;
+        this.transactions = new ArrayList<>();
+    }
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+    public String getAccountHolderName() {
+        return accountHolderName;
+    }
+    public double getBalance() {
+        return balance;
+    }
+    public void deposit(double amount) {
+        if (amount > 0) {
+            balance += amount;
+            transactions.add(new Transaction("Deposit", amount, balance));
+            System.out.println("Successfully deposited: Rs. " + amount);
+        } else {
+            System.out.println("Invalid deposit amount.");
+        }
+    }
+    public void withdraw(double amount) {
+        if (amount > 0 && amount <= balance) {
+            balance -= amount;
+            transactions.add(new Transaction("Withdraw", amount, balance));
+            System.out.println("Successfully withdrew: Rs. " + amount);
+        } else {
+            System.out.println("Invalid or insufficient balance.");
+        }
+    }
+    public void transfer(Account targetAccount, double amount) {
+        if (amount > 0 && amount <= balance) {
+            balance -= amount;
+            targetAccount.balance += amount;
+            transactions.add(new Transaction("Transfer to " + targetAccount.getAccountNumber(), amount, balance));
+            targetAccount.transactions.add(new Transaction("Transfer from " + accountNumber, amount, targetAccount.balance));
+            System.out.println("Successfully transferred: Rs. " + amount + " to " + targetAccount.getAccountNumber());
+        } else {
+            System.out.println("Invalid or insufficient balance for transfer.");
+        }
+    }
+    public void viewTransactionHistory() {
+        System.out.println("Transaction history for account: " + accountNumber);
+        for (Transaction t : transactions) {
+            System.out.println(t);
+        }
+    }
+}
+class BankSystem {
+    private HashMap<String, Account> accounts = new HashMap<>();
+    private Scanner scanner = new Scanner(System.in);
+    public void createAccount() {
+        System.out.print("Enter account number: ");
+        String accountNumber = scanner.nextLine();
+        System.out.print("Enter account holder name: ");
+        String accountHolderName = scanner.nextLine();
+        Account newAccount = new Account(accountNumber, accountHolderName);
+        accounts.put(accountNumber, newAccount);
+        System.out.println("Account created successfully.");
+    }
+    public Account getAccount(String accountNumber) {
+        return accounts.get(accountNumber);
+    }
+    public void checkBalance(Account account) {
+        System.out.println("Current balance for account " + account.getAccountNumber() + ": Rs. " + account.getBalance());
+    }
+    public void start() {
+        while (true) {
+            System.out.println("\nWelcome to the Dhruv's Banking System");
+            System.out.println("1. Create Account");
+            System.out.println("2. Deposit");
+            System.out.println("3. Withdraw");
+            System.out.println("4. Transfer");
+            System.out.println("5. View Transaction History");
+            System.out.println("6. Check Balance");
+           System.out.print("Enter choice: ");
+            int choice = Integer.parseInt(scanner.nextLine());
+            switch (choice) {
+                case 1:
+                    createAccount();
+                    break;
+                case 2:
+                    System.out.print("Enter account number: ");
+                    Account depositAccount = getAccount(scanner.nextLine());
+                    if (depositAccount != null) {
+                        System.out.print("Enter deposit amount: ");
+                        double depositAmount = Double.parseDouble(scanner.nextLine());
+                        depositAccount.deposit(depositAmount);
+                    } else {
+                        System.out.println("Account not found.");
+                    }
+                    break;
+                case 3:
+                    System.out.print("Enter account number: ");
+                    Account withdrawAccount = getAccount(scanner.nextLine());
+                    if (withdrawAccount != null) {
+                        System.out.print("Enter withdrawal amount: ");
+                        double withdrawAmount = Double.parseDouble(scanner.nextLine());
+                        withdrawAccount.withdraw(withdrawAmount);
+                    } else {
+                        System.out.println("Account not found.");
+                    }
+                    break;
+                case 4:
+                    System.out.print("Enter source account number: ");
+                    Account sourceAccount = getAccount(scanner.nextLine());
+                    if (sourceAccount != null) {
+                        System.out.print("Enter target account number: ");
+                        Account targetAccount = getAccount(scanner.nextLine());
+                        if (targetAccount != null) {
+                            System.out.print("Enter transfer amount: ");
+                            double transferAmount = Double.parseDouble(scanner.nextLine());
+                            sourceAccount.transfer(targetAccount, transferAmount);
+                        } else {
+                            System.out.println("Target account not found.");
+                        }
+                    } else {
+                        System.out.println("Source account not found.");
+                    }
+                    break;
+                case 5:
+                    System.out.print("Enter account number: ");
+                    Account transactionAccount = getAccount(scanner.nextLine());
+                    if (transactionAccount != null) {
+                        transactionAccount.viewTransactionHistory();
+                    } else {
+                        System.out.println("Account not found.");
+                    }
+                    break;
+                case 6:
+                    System.out.print("Enter account number: ");
+                    Account balanceAccount = getAccount(scanner.nextLine());
+                    if (balanceAccount != null) {
+                        checkBalance(balanceAccount);
+                    } else {
+                        System.out.println("Account not found.");
+                    }
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+    }
+}
+ class OnlineBankingSystem {
+    public static void main(String[] args) {
+        BankSystem bankSystem = new BankSystem();
+        bankSystem.start();
+    }
