@@ -59,7 +59,8 @@ class Account {
             transactions.add(new Transaction("Transfer to " + targetAccount.getAccountNumber(), amount, balance));
             targetAccount.transactions.add(new Transaction("Transfer from " + accountNumber, amount, targetAccount.balance));
             System.out.println("Successfully transferred: Rs. " + amount + " to " + targetAccount.getAccountNumber());
-        } else {
+        } else
+            {
             System.out.println("Invalid or insufficient balance for transfer.");
         }
     }
