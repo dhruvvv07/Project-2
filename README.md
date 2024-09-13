@@ -6,7 +6,7 @@ Contact: [dhruvgupta3035@gmail.com](mailto:dhruvgupta3035@gmail.com)
 
 ## Project Description
 
-The Online Banking System is a comprehensive Java-based application designed to manage various banking operations. This system allows users to:
+This Online Banking System is a basic and comprehensive Java-based application designed to manage various banking operations. This system allows users to:
 
 - **Create Accounts**: Set up new bank accounts with necessary personal information.
 - **Deposit Funds**: Add money to their accounts.
