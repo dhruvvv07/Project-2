@@ -1,8 +1,8 @@
 # Online Banking System
 
-This project was developed by [Your Name].
+This project was developed by **Dhruv Gupta**.
 
-Contact: [your-email@example.com](mailto:your-email@example.com)
+Contact: [dhruvgupta3035@gmail.com](mailto:dhruvgupta3035@gmail.com)
 
 ## Project Description
 
